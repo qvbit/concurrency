@@ -16,7 +16,8 @@ class BlockingQueue:
             self.cond.wait()
         self.q.append(item)
         self.curr_size += 1
-        self.cond.notify_all()  # Notifies any waiting consumers blocked on empty queue
+        # Notifies any waiting consumers blocked on empty queue. notify_all over notify is critical to avoid deadlock
+        self.cond.notify_all()
         self.cond.release()
 
     def dequeue(self):
